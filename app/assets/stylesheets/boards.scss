@@ -1,0 +1,16 @@
+// Place all the styles related to the boards controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.board-line{
+  .board-id{
+    display: inline-block;
+    width: 50px;
+    padding: 5px;
+  }
+  .board-title{
+    display: inline-block;
+    width: 500px;
+  }
+
+}
