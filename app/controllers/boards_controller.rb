@@ -29,4 +29,14 @@ class BoardsController < ApplicationController
     render :json=> response
   end
 
+  def readBoard
+    response = {status:true}
+
+    recs = Board.where("id = ?", params[:board_id])
+
+    response["row"] = recs[0]
+
+    render :json=> response
+  end
+
 end

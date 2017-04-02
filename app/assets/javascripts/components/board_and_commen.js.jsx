@@ -32,6 +32,23 @@ class BoardAndComment extends React.Component{
        error :function(XMLHttpRequest, textStatus, errorThrown){
        }
     });
+
+
+    $.ajax({
+       type: "GET",
+       url: "/boards/readBoard/" + id,
+       async: false,
+       dataType: "json",
+       data: "name=John&location=Boston",
+       success: function(data, dataType){
+         if (data.status == true){
+           svThis.setState({board_title: data.row.title});
+           svThis.setState({board_description: data.row.description});
+         }
+       },
+       error :function(XMLHttpRequest, textStatus, errorThrown){
+       }
+    });
   }
 
   handleCommentAdd(){
@@ -79,6 +96,8 @@ class BoardAndComment extends React.Component{
         <div className="right-side">
           <CommentAdd
             users={this.props.users}
+            board_title={this.state.board_title}
+            board_description={this.state.board_description}
             onUserChange={(uid) => this.handleUserChange(uid)}
             onCommentChange={(cm) => this.handleCommentChange(cm)}
             onCommentAdd={() => this.handleCommentAdd()}
