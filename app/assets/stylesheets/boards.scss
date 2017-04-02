@@ -46,3 +46,28 @@ div.cadd{
     height: 60px;
   }
 }
+
+div.cline{
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+
+  label {
+    display: inline-block;
+  }
+  label.name{
+    width: 100px;
+  }
+  label.sex {
+    width: 40px;
+    font-size: 9px;
+  }
+  label.age{
+    width: 50px;
+    font-size: 9px;
+  }
+
+  .comment{
+    padding: 10px;
+  }
+}

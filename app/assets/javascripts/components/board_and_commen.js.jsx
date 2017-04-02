@@ -1,7 +1,7 @@
 class BoardAndComment extends React.Component{
   constructor(props){
     super(props);
-    this.state = {comment: '', user_id: 1, board_id: -1, board_title: '', board_description: ''};
+    this.state = {comment: '', user_id: 1, board_id: -1, comments: [], board_title: '', board_description: ''};
   }
 
   handleCommentChange(cm){
@@ -14,6 +14,24 @@ class BoardAndComment extends React.Component{
 
   handleBoardSelect(id){
     this.setState({board_id: id});
+
+    var svThis = this;
+
+    $.ajax({
+       type: "GET",
+       url: "/boards/readComments/" + id,
+       async: false,
+       dataType: "json",
+       data: "name=John&location=Boston",
+       success: function(data, dataType){
+         if (data.status == true){
+           //alert(data.rows.length);
+           svThis.setState({comments: data.rows});
+         }
+       },
+       error :function(XMLHttpRequest, textStatus, errorThrown){
+       }
+    });
   }
 
   handleCommentAdd(){
@@ -39,7 +57,8 @@ class BoardAndComment extends React.Component{
        success: function(data, dataType){
          //alert(data.status + "--" + data.row.company_name)
          if (data.status == true){
-           alert("投稿成功");
+           //alert("投稿成功");
+           svThis.handleBoardSelect(svThis.state.board_id);
          }
        },
        error :function(XMLHttpRequest, textStatus, errorThrown){
@@ -64,7 +83,7 @@ class BoardAndComment extends React.Component{
             onCommentChange={(cm) => this.handleCommentChange(cm)}
             onCommentAdd={() => this.handleCommentAdd()}
            />
-          <CommentList />
+           <CommentList datas={this.state.comments} />
         </div>
       </div>
     );
@@ -148,7 +167,7 @@ class CommentAdd extends React.Component{
     var i;
     for (i = 0 ; i < this.props.users.length ; i++){
       var user = this.props.users[i];
-      users.push(<option value={user.id}>{user.name}</option>);
+      users.push(<option value={user.id} key={user.id}>{user.name}</option>);
     }
 
     return (
@@ -190,11 +209,40 @@ class CommentList extends React.Component{
   }
 
   render(){
+    var lists = [];
+    var i;
+    for (i = 0 ; i < this.props.datas.length; i++){
+      var data = this.props.datas[i];
+      lists.push(<CommentLine data={data} key={data.id} />);
+    }
+
     return (
-      <div>
+      <div className="clist">
         掲示板内の投稿一覧を表示する場所です。
+        {lists}
       </div>
     );
   }
+}
 
+class CommentLine extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+
+    return (
+      <div className="cline">
+        <div>
+          <label className="name">{this.props.data.user.name}</label>
+          <label className="sex">{this.props.data.user.sex == 1 ? '男性' : '女性'}</label>
+          <label className="age">{this.props.data.user.age}歳</label>
+        </div>
+        <div className="comment">
+          {this.props.data.comment}
+        </div>
+      </div>
+    );
+  }
 }
